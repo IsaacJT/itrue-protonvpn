@@ -4,14 +4,13 @@
 
 name: itrue-protonvpn
 base: core22
-version: '0.1'
 summary: Proton VPN GUI client
 description: |
   Proton VPN GUI client.
 
   Note: this is not released or supported by Proton!
-
 license: GPL-3.0
+version: git
 grade: devel
 confinement: strict
 compression: lzo
@@ -42,12 +41,31 @@ parts:
       - gir1.2-appindicator3-0.1
       - protonvpn-gui
 
+slots:
+  protonvpn-dbus:
+    interface: dbus
+    bus: session
+    name: com.protonvpn.www
+
 apps:
   itrue-protonvpn:
     command: usr/bin/protonvpn
     extensions:
       - gnome
     plugs:
+      - home
+      - network-control
+      - firewall-control
       - network-manager
+      - process-control
+      - hardware-observe
+      - gpg-public-keys
+      - password-manager-service
+    slots:
+      - protonvpn-dbus
     environment:
       PYTHONPATH: $SNAP/usr/lib/python3/dist-packages:$PYTHONPATH
+
+layout:
+  /etc:
+    bind: $SNAP/etc
