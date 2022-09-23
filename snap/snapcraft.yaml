@@ -48,6 +48,6 @@ apps:
     extensions:
       - gnome
     plugs:
-      - network-control
+      - network-manager
     environment:
       PYTHONPATH: $SNAP/usr/lib/python3/dist-packages:$PYTHONPATH
