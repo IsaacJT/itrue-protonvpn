@@ -1,0 +1,53 @@
+---
+# SPDX-License-Identifier: GPL-3.0
+# Copyright (C) 2022 Isaac True
+
+name: itrue-protonvpn
+base: core22
+version: '0.1'
+summary: Proton VPN GUI client
+description: |
+  Proton VPN GUI client.
+
+  Note: this is not released or supported by Proton!
+
+license: GPL-3.0
+grade: devel
+confinement: strict
+compression: lzo
+
+architectures:
+  - build-on:
+      - amd64
+    build-for:
+      - amd64
+  - build-on:
+      - i386
+    build-for:
+      - i386
+
+package-repositories:
+  - type: apt
+    url:  https://repo.protonvpn.com/debian
+    suites: [stable]
+    components: [main]
+    key-id: 6A5571928D2222D83BC7456E4EDE055B645F044F
+    key-server: keyserver.ubuntu.com
+    architectures: [$CRAFT_TARGET_ARCH]
+
+parts:
+  dependencies:
+    plugin: nil
+    stage-packages:
+      - gir1.2-appindicator3-0.1
+      - protonvpn-gui
+
+apps:
+  itrue-protonvpn:
+    command: usr/bin/protonvpn
+    extensions:
+      - gnome
+    plugs:
+      - network-control
+    environment:
+      PYTHONPATH: $SNAP/usr/lib/python3/dist-packages:$PYTHONPATH
